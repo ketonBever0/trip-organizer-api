@@ -1,0 +1,43 @@
+$env:GOOGLE_APPLICATION_CREDENTIALS="C:\Users\lacik\Desktop\repos\trip-organizer-api\trip-organizer-api\src\Api\Environment\service_account-firebase_admin_config.json"
+
+src/
+    Api/
+        Program.cs
+        Middlewares/
+        Configurations/
+        Features/
+            Auth/
+                AuthController.cs
+                Commands/
+                Queries/
+                Dtos/
+                Validators/
+            Users/
+                UsersController.cs
+                Commands/
+                Queries/
+                Dtos/
+                Validators/
+            Trips/
+                TripsController.cs
+                Commands/
+                Queries/
+                Dtos/
+                Validators/
+
+    Application/
+        Interfaces/
+        Behaviors/
+        Common/
+        Exceptions/
+
+    Domain/
+        Entities/
+        ValueObjects/
+        Enums/
+
+    Infrastructure/
+        Persistence/
+        Firebase/
+        Repositories/
+        Config/
