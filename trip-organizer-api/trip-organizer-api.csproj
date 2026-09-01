@@ -19,8 +19,4 @@
     <Compile Include="src/Api/Program.cs" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="src\Api\Environment\" />
-  </ItemGroup>
-
 </Project>
