@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="FirebaseAdmin" Version="3.6.0" />
+    <PackageReference Include="Google.Cloud.Firestore" Version="4.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.11" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="10.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3" />
@@ -17,6 +18,16 @@
 
   <ItemGroup>
     <Compile Include="src/Api/Program.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="src\Api\Features\Auth\" />
+    <Folder Include="src\Application\Interfaces\" />
+    <Folder Include="src\Application\Behaviors\" />
+    <Folder Include="src\Application\Common\" />
+    <Folder Include="src\Application\Exceptions\" />
+    <Folder Include="src\Infrastructure\Repositories\" />
+    <Folder Include="src\Infrastructure\Persistence\" />
   </ItemGroup>
 
 </Project>

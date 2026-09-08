@@ -23,14 +23,20 @@ public partial class Program
         }
 
         // OPTIONS
-        var appOptions = new AppOptions()
+        var appOptions = new AppOptions();
+        try
         {
-            Credential = GoogleCredential.FromFile("src/Api/Environment/service_account-firebase_admin_config.json")
-        };
+            appOptions.Credential = GoogleCredential.FromFile("src/Api/Environment/service_account-firebase_admin_config.json");
+        }
+        catch (FileNotFoundException)
+        {
+            Console.Error.WriteLine("LAUNCH ERROR: Service account file not found.");
+            return;
+        }
 
         // CONFIGS
         FirebaseApp.Create(appOptions);
-        
+
 
 
 
