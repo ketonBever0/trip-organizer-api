@@ -19,7 +19,8 @@ namespace trip_organizer_api.src.Api.Features.Users
         [HttpGet(Name = "GetUsers")]
         public async Task<IActionResult> GetUsers()
         {
-            var result = await this._ctx.User.ListUsersAsync();
+            Request.Headers.TryGetValue("AuthOnly", out var authOnly);
+            var result = authOnly == "true" ? await _ctx.User.ListAuthUsersAsync() : await _ctx.User.ListUsersAsync();
 
             return Ok(result);
         }

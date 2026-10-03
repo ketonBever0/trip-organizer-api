@@ -19,7 +19,7 @@ public partial class Program
 
         // CONFIGS
         var firebaseOptions = builder.Configuration.GetSection("Firebase").Get<FirebaseOptions>();
-        FirebaseInitializer.Initialize(firebaseOptions);
+        FirebaseInstance.Initialize(firebaseOptions);
 
 
 

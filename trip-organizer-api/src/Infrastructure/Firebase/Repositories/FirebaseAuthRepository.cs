@@ -6,11 +6,12 @@ namespace trip_organizer_api.src.Infrastructure.Firebase.Repositories
 {
     public class FirebaseAuthRepository : IAuthRepository
     {
+        private static readonly FirebaseAuth _auth = FirebaseInstance.GetAuth();
         public async Task<UserRecord> VerifyIdTokenAsync(string idToken)
         {
-            var decodedToken = await FirebaseAuth.DefaultInstance.VerifyIdTokenAsync(idToken);
+            var decodedToken = await _auth.VerifyIdTokenAsync(idToken);
             var uid = decodedToken.Uid;
-            var userRecord = await FirebaseAuth.DefaultInstance.GetUserAsync(uid);
+            var userRecord = await _auth.GetUserAsync(uid);
             return userRecord;
         }
 
