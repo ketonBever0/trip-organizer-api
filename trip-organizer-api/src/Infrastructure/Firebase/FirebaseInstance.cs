@@ -1,4 +1,6 @@
-﻿using FirebaseAdmin;
+﻿using Firebase.Auth;
+using Firebase.Auth.Providers;
+using FirebaseAdmin;
 using FirebaseAdmin.Auth;
 using Google.Apis.Auth.OAuth2;
 using Google.Cloud.Firestore;
@@ -12,9 +14,10 @@ namespace trip_organizer_api.src.Infrastructure.Firebase
     {
         private static bool _initialized = false;
         private static FirestoreDb? _db;
+        private static FirebaseAuthClient? _auth;
         private static readonly Lock _lock = new();
 
-        public static void Initialize(FirebaseOptions options)
+        public static void Initialize(FirebaseOptions options, FirebaseClientConfig clientOptions)
         {
             if (_initialized) return;
 
@@ -30,6 +33,14 @@ namespace trip_organizer_api.src.Infrastructure.Firebase
                 FirebaseApp.Create(appOptions);
                 //_db = FirestoreDb.Create(options.ProjectId);
                 _db = new FirestoreDbBuilder { ProjectId = options.ProjectId, Credential = appOptions.Credential }.Build();
+                _auth = new FirebaseAuthClient(new FirebaseAuthConfig
+                {
+                    ApiKey = clientOptions.ApiKey,
+                    AuthDomain = clientOptions.AuthDomain,
+                    Providers = [
+                        new EmailProvider()
+                    ]
+                });
                 _initialized = true;
                 Console.WriteLine("Firebase initialized.");
                 //Console.WriteLine("FirebaseApp: " + (FirebaseApp.DefaultInstance != null));
@@ -44,6 +55,15 @@ namespace trip_organizer_api.src.Infrastructure.Firebase
                 throw new InvalidOperationException("Firebase has not been initialized.");
             }
             return FirebaseAuth.DefaultInstance;
+        }
+
+        public static FirebaseAuthClient GetAuthClient()
+        {
+            if (!_initialized || _auth == null)
+            {
+                throw new InvalidOperationException("Firebase has not been initialized.");
+            }
+            return _auth;
         }
 
         public static FirestoreDb GetFirestore()

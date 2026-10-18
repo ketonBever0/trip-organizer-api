@@ -9,7 +9,7 @@ namespace trip_organizer_api.src.Infrastructure.Firebase.Repositories
     {
         private static readonly FirebaseAuth _auth = FirebaseInstance.GetAuth();
         private static readonly FirestoreDb _db = FirebaseInstance.GetFirestore();
-        
+
         public async Task<List<User>> ListAuthUsersAsync()
         {
             var users = _auth.ListUsersAsync(null);
@@ -49,6 +49,27 @@ namespace trip_organizer_api.src.Infrastructure.Firebase.Repositories
             }
 
             return result;
+        }
+
+        public async Task UpdateUserAsync(User user)
+        {
+            var snap = await _db.Collection("users").Document(user.ID).GetSnapshotAsync();
+            if (!snap.Exists)
+            {
+                throw new Exception($"User with ID {user.ID} does not exist.");
+            }
+            var updates = new Dictionary<string, object>
+            {
+                { "firstname", user.Firstname },
+                { "lastname", user.Lastname },
+                { "nick", user.Nick }
+            };
+            await _db.Collection("users").Document(user.ID).UpdateAsync(updates);
+        }
+
+        public Task UploadProfilePicture(IFormFile file)
+        {
+            throw new NotImplementedException();
         }
 
         public Task DeleteUserAsync(string userId)

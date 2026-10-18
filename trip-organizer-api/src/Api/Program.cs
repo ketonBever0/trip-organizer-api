@@ -1,5 +1,6 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using trip_organizer_api.src.Api.Middlewares;
 using trip_organizer_api.src.Application;
 using trip_organizer_api.src.Application.Interfaces;
 using trip_organizer_api.src.Infrastructure.Config;
@@ -18,8 +19,9 @@ public partial class Program
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 
         // CONFIGS
-        var firebaseOptions = builder.Configuration.GetSection("Firebase").Get<FirebaseOptions>();
-        FirebaseInstance.Initialize(firebaseOptions);
+        var firebaseOptions = builder.Configuration.GetSection("Firebase").Get<FirebaseOptions>() ?? throw new Exception("Firebase configuration is missing.");
+        var firebaseClientConfig = builder.Configuration.GetSection("FirebaseClientConfig").Get<FirebaseClientConfig>() ?? throw new Exception("Firebase Client configuration is missing.");
+        FirebaseInstance.Initialize(firebaseOptions, firebaseClientConfig);
 
 
 
@@ -36,6 +38,10 @@ public partial class Program
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
 
+        // GLOBAL EXCEPTION HANDLER
+        builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+        builder.Services.AddProblemDetails();
+
         var app = builder.Build();
 
         // ENV
@@ -45,6 +51,7 @@ public partial class Program
             app.UseSwaggerUI();
         }
 
+        app.UseExceptionHandler();
 
         app.UseHttpsRedirection();
 
