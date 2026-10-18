@@ -1,5 +1,9 @@
 using FirebaseAdmin;
 using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using trip_organizer_api.src.Api.Middlewares;
 using trip_organizer_api.src.Application;
 using trip_organizer_api.src.Application.Interfaces;
@@ -23,8 +27,6 @@ public partial class Program
         var firebaseClientConfig = builder.Configuration.GetSection("FirebaseClientConfig").Get<FirebaseClientConfig>() ?? throw new Exception("Firebase Client configuration is missing.");
         FirebaseInstance.Initialize(firebaseOptions, firebaseClientConfig);
 
-
-
         // GLOBAL REPOSITORIES
 
         // FIREBASE REPOSITORIES
@@ -34,6 +36,19 @@ public partial class Program
         builder.Services.AddControllers();
         builder.Services.AddSingleton<DBSelector>();
         builder.Services.AddScoped<IDBContext, DBContext>();
+
+
+        // AUTH
+        builder.Services
+            .AddAuthentication()
+            .AddBearerToken();
+
+        //builder.Services
+        //    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        //    .AddJwtBearer(options => builder.Configuration.Bind("JwtSettings", options))
+        //    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+        //        options => builder.Configuration.Bind("CookieSettings", options)
+        //        );
 
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
@@ -55,6 +70,7 @@ public partial class Program
 
         app.UseHttpsRedirection();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
