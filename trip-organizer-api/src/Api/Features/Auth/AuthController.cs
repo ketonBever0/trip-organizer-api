@@ -8,7 +8,6 @@ using trip_organizer_api.src.Application.Exceptions;
 namespace trip_organizer_api.src.Api.Features.Auth
 {
     [ApiController]
-    //[Authorize]
     [Route("api/[controller]")]
     public class AuthController : ControllerBase
     {
